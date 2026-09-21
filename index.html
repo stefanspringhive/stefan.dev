@@ -219,26 +219,30 @@
   }
   .btn-ghost:hover span{border-color:var(--cyan);color:var(--cyan);}
 
-  /* ===== 3D carousel ===== */
+  /* ===== Hero carousel ===== */
   .stage-wrap{
-    perspective:1400px;
+    position:relative;
     display:flex;flex-direction:column;align-items:center;
     justify-content:center;
-    height:420px;
+    gap:22px;
   }
-  .stage{
-    position:relative;
-    width:280px;height:340px;
-    transform-style:preserve-3d;
-    transition:transform 0.9s cubic-bezier(.65,.05,.36,1);
-  }
-  .card3d{
-    position:absolute;top:0;left:0;
+  .stage-viewport{
     width:280px;height:340px;
     border-radius:20px;
     overflow:hidden;
-    border:1px solid rgba(255,255,255,0.14);
     box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .stage{
+    display:flex;
+    height:100%;
+    transition:transform 0.6s cubic-bezier(.65,.05,.36,1);
+  }
+  .card3d{
+    position:relative;
+    width:280px;height:340px;
+    flex:0 0 auto;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.14);
     background:var(--surface);
   }
   .card3d .browser-top{
@@ -290,13 +294,28 @@
     padding:6px 12px;border-radius:999px;
     backdrop-filter:blur(4px);
   }
-  .dots{display:flex;gap:9px;margin-top:26px;}
+  .stage-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:40px;height:40px;border-radius:50%;
+    background:rgba(21,14,43,0.75);
+    border:1px solid rgba(255,255,255,0.18);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    z-index:3;
+    backdrop-filter:blur(4px);
+    transition:background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .stage-arrow svg{width:18px;height:18px;}
+  .stage-arrow:hover{background:rgba(45,212,224,0.25);border-color:var(--cyan);}
+  .stage-arrow.prev{left:-14px;}
+  .stage-arrow.next{right:-14px;}
+  .dots{display:flex;gap:9px;}
   .dot{width:9px;height:9px;border-radius:50%;background:var(--line);transition:.25s;border:none;cursor:pointer;}
   .dot.active{width:26px;background:linear-gradient(90deg,var(--violet),var(--magenta));}
 
   @media(max-width:920px){
     .hero .wrap{grid-template-columns:1fr;}
-    .stage-wrap{order:-1;height:340px;}
+    .stage-wrap{order:-1;}
     .nav-links{display:none;}
     .nav-cta{display:none;}
     .nav-toggle{display:flex;}
@@ -308,11 +327,14 @@
     .contact-strip .wrap{gap:12px;font-size:12.5px;}
   }
   @media(max-width:400px){
-    .stage-wrap{height:300px;}
-    .stage,.card3d{width:230px;height:280px;}
+    .stage-viewport{width:230px;height:280px;}
+    .card3d{width:230px;height:280px;}
     .card-screen{gap:16px;padding:0 14px 30px;}
     .tech-logo,.tech-logo-svg{width:58px;height:58px;}
     .card-screen-name{font-size:13.5px;}
+    .stage-arrow{width:34px;height:34px;}
+    .stage-arrow.prev{left:-8px;}
+    .stage-arrow.next{right:-8px;}
   }
   @media (prefers-reduced-motion: reduce){
     .hero-copy{animation:none;opacity:1;transform:none;}
@@ -1244,40 +1266,48 @@
       </div>
 
       <div class="stage-wrap">
-        <div class="stage" id="stage">
-          <div class="card3d card1" data-i="0">
-            <div class="browser-top"><i></i><i></i><i></i></div>
-            <div class="card-screen">
-              <img class="tech-logo" src="https://cdn.simpleicons.org/wordpress/ffffff" alt="WordPress logo" loading="lazy">
-              <span class="card-screen-name">WordPress</span>
+        <button class="stage-arrow prev" id="stagePrev" aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="stage-viewport">
+          <div class="stage" id="stage">
+            <div class="card3d card1" data-i="0">
+              <div class="browser-top"><i></i><i></i><i></i></div>
+              <div class="card-screen">
+                <img class="tech-logo" src="https://cdn.simpleicons.org/wordpress/ffffff" alt="WordPress logo" loading="lazy">
+                <span class="card-screen-name">WordPress</span>
+              </div>
+              <div class="card-label">WordPress</div>
             </div>
-            <div class="card-label">WordPress</div>
-          </div>
-          <div class="card3d card2" data-i="1">
-            <div class="browser-top"><i></i><i></i><i></i></div>
-            <div class="card-screen">
-              <img class="tech-logo" src="https://cdn.simpleicons.org/shopify/ffffff" alt="Shopify logo" loading="lazy">
-              <span class="card-screen-name">Shopify</span>
+            <div class="card3d card2" data-i="1">
+              <div class="browser-top"><i></i><i></i><i></i></div>
+              <div class="card-screen">
+                <img class="tech-logo" src="https://cdn.simpleicons.org/shopify/ffffff" alt="Shopify logo" loading="lazy">
+                <span class="card-screen-name">Shopify</span>
+              </div>
+              <div class="card-label">Shopify</div>
             </div>
-            <div class="card-label">Shopify</div>
-          </div>
-          <div class="card3d card3" data-i="2">
-            <div class="browser-top"><i></i><i></i><i></i></div>
-            <div class="card-screen">
-              <img class="tech-logo" src="https://cdn.simpleicons.org/woocommerce/ffffff" alt="WooCommerce logo" loading="lazy">
-              <span class="card-screen-name">WooCommerce</span>
+            <div class="card3d card3" data-i="2">
+              <div class="browser-top"><i></i><i></i><i></i></div>
+              <div class="card-screen">
+                <img class="tech-logo" src="https://cdn.simpleicons.org/woocommerce/ffffff" alt="WooCommerce logo" loading="lazy">
+                <span class="card-screen-name">WooCommerce</span>
+              </div>
+              <div class="card-label">WooCommerce</div>
             </div>
-            <div class="card-label">WooCommerce</div>
-          </div>
-          <div class="card3d card4" data-i="3">
-            <div class="browser-top"><i></i><i></i><i></i></div>
-            <div class="card-screen">
-              <svg class="tech-logo-svg" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.4" fill="#fff" stroke="none"/><circle cx="19" cy="21" r="1.4" fill="#fff" stroke="none"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 7H6"/></svg>
-              <span class="card-screen-name">E-Commerce</span>
+            <div class="card3d card4" data-i="3">
+              <div class="browser-top"><i></i><i></i><i></i></div>
+              <div class="card-screen">
+                <svg class="tech-logo-svg" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1.4" fill="#fff" stroke="none"/><circle cx="19" cy="21" r="1.4" fill="#fff" stroke="none"/><path d="M2 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 7H6"/></svg>
+                <span class="card-screen-name">E-Commerce</span>
+              </div>
+              <div class="card-label">E-Commerce</div>
             </div>
-            <div class="card-label">E-Commerce</div>
           </div>
         </div>
+        <button class="stage-arrow next" id="stageNext" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
         <div class="dots" id="dots"></div>
       </div>
     </div>
@@ -1685,14 +1715,13 @@
   const stage = document.getElementById('stage');
   const dotsWrap = document.getElementById('dots');
   const cards = document.querySelectorAll('.card3d');
+  const stagePrev = document.getElementById('stagePrev');
+  const stageNext = document.getElementById('stageNext');
   const total = cards.length;
-  const radius = 340;
   let active = 0;
   let timer;
 
   cards.forEach((card, i) => {
-    const angle = (360 / total) * i;
-    card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
     const dot = document.createElement('button');
     dot.className = 'dot' + (i === 0 ? ' active' : '');
     dot.setAttribute('aria-label', 'Show slide ' + (i + 1));
@@ -1700,8 +1729,12 @@
     dotsWrap.appendChild(dot);
   });
 
+  function cardWidth(){
+    return cards[0].getBoundingClientRect().width;
+  }
+
   function render(){
-    stage.style.transform = `rotateY(${-(360 / total) * active}deg)`;
+    stage.style.transform = `translateX(${-active * cardWidth()}px)`;
     document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === active));
   }
 
@@ -1716,10 +1749,18 @@
     render();
   }
 
+  function prev(){
+    active = (active - 1 + total) % total;
+    render();
+  }
+
   function resetTimer(){
     clearInterval(timer);
     timer = setInterval(next, 4200);
   }
+
+  stagePrev.addEventListener('click', () => { prev(); resetTimer(); });
+  stageNext.addEventListener('click', () => { next(); resetTimer(); });
 
   render();
   resetTimer();
@@ -1727,6 +1768,7 @@
   const stageWrap = document.querySelector('.stage-wrap');
   stageWrap.addEventListener('mouseenter', () => clearInterval(timer));
   stageWrap.addEventListener('mouseleave', resetTimer);
+  window.addEventListener('resize', render);
 
   // ===== Scroll reveal (both directions) =====
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
